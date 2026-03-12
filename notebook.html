@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📒 Working Notebook (clean wide text box)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Light mode (default) */
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+        }
+        
+        /* Dark mode styles */
+        body.dark {
+            background: #1a1a1a;
+        }
+        
+        body.dark .container {
+            background: #2d2d2d;
+        }
+        
+        body.dark h1 {
+            color: #ffffff;
+        }
+        
+        body.dark .password-box {
+            background: #3d3d3d;
+            color: white;
+        }
+        
+        body.dark .password-box h3 {
+            color: white;
+        }
+        
+        body.dark .password-input {
+            background: #4d4d4d;
+            border-color: #666;
+            color: white;
+        }
+        
+        body.dark .password-input::placeholder {
+            color: #aaa;
+        }
+        
+        body.dark .unlock-btn {
+            background: #0056b3;
+        }
+        
+        /* Clean wide text box dark mode */
+        body.dark .note-input {
+            background: #3d3d3d;
+            border-color: #666;
+            color: white;
+        }
+        
+        body.dark .note-input::placeholder {
+            color: #aaa;
+        }
+        
+        body.dark .note-card {
+            background: #3d3d3d;
+            border-left-color: #0056b3;
+            color: white;
+        }
+        
+        body.dark .note-text {
+            color: #ffffff;
+        }
+        
+        body.dark .note-text a {
+            color: #66b0ff;
+        }
+        
+        body.dark .note-text a:hover {
+            color: #99ccff;
+        }
+        
+        body.dark .note-date {
+            color: #aaa;
+        }
+        
+        body.dark .status {
+            color: #aaa;
+        }
+        
+        body.dark .notes-header h3 {
+            color: white;
+        }
+        
+        body.dark .clear-btn {
+            background: #a71d2a;
+        }
+        
+        body.dark .delete-note {
+            color: #aaa;
+        }
+        
+        body.dark .delete-note:hover {
+            color: #ff6b6b;
+        }
+        
+        body.dark .edit-note {
+            color: #aaa;
+        }
+        
+        body.dark .edit-note:hover {
+            color: #ffaa00;
+        }
+        
+        body.dark .dark-mode-toggle {
+            border-color: #ffaa00;
+            color: #ffaa00;
+        }
+        
+        body.dark .import-export-btn {
+            background: #4d4d4d;
+            color: white;
+            border-color: #666;
+        }
+        
+        body.dark .import-export-btn:hover {
+            background: #666;
+        }
+        
+        body.dark .message.success {
+            background: #155724;
+            color: #d4edda;
+            border-color: #28a745;
+        }
+        
+        body.dark .message.error {
+            background: #721c24;
+            color: #f8d7da;
+            border-color: #dc3545;
+        }
+        
+        /* Password section */
+        .password-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .password-box h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .unlock-btn {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .unlock-btn:hover {
+            background: #0056b3;
+        }
+        
+        /* Header with dark mode toggle */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .dark-mode-toggle {
+            background: none;
+            border: 2px solid #007bff;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #007bff;
+            transition: all 0.3s;
+        }
+        
+        .dark-mode-toggle:hover {
+            background: #007bff;
+            color: white;
+        }
+        
+        /* ===== CLEAN WIDE TEXT BOX ===== */
+        .note-form {
+            margin-bottom: 30px;
+        }
+        
+        .note-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            resize: vertical;
+            min-height: 180px;
+            max-height: 400px;
+            font-family: inherit;
+            background: white;
+            outline: none;
+            transition: border-color 0.3s;
+            line-height: 1.6;
+        }
+        
+        .note-input:focus {
+            border-color: #007bff;
+        }
+        
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .save-btn:hover {
+            background: #218838;
+        }
+        
+        /* Import/Export buttons */
+        .import-export-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .import-export-btn {
+            flex: 1;
+            padding: 12px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+        
+        .import-export-btn:hover {
+            background: #5a6268;
+        }
+        
+        .import-export-btn.import {
+            background: #17a2b8;
+        }
+        
+        .import-export-btn.import:hover {
+            background: #138496;
+        }
+        
+        .import-export-btn.export {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .import-export-btn.export:hover {
+            background: #e0a800;
+        }
+        
+        /* Hidden file input */
+        #fileImport {
+            display: none;
+        }
+        
+        /* Notes list */
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .notes-header h3 {
+            color: #333;
+        }
+        
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        
+        .note-card {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        
+        .note-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            padding-right: 60px;
+        }
+        
+        /* URL styling */
+        .note-text a {
+            color: #0066cc;
+            text-decoration: underline;
+            text-decoration-style: dotted;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        
+        .note-text a:hover {
+            color: #004999;
+            text-decoration-style: solid;
+        }
+        
+        .note-date {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .delete-note {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+        .delete-note:hover {
+            color: #dc3545;
+        }
+        
+        .edit-note {
+            position: absolute;
+            top: 12px;
+            right: 36px;
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 5px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .edit-note:hover {
+            color: #007bff;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .auto-save-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+            z-index: 1000;
+            animation: fadeInOut 2s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(10px); }
+            20% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-10px); }
+        }
+        
+        .message {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="auto-save-indicator" id="autoSaveIndicator">💾 Auto-saved!</div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span>📒</span>
+                My Notebook
+            </h1>
+            
+            <!-- Dark Mode Toggle Button -->
+            <button onclick="toggleDarkMode()" class="dark-mode-toggle" id="darkModeToggle">
+                <span id="darkModeIcon">🌙</span>
+                <span id="darkModeText">Dark</span>
+            </button>
+        </div>
+        
+        <!-- Password Protection -->
+        <div id="passwordSection" class="password-box">
+            <h3>🔐 Protected Notebook</h3>
+            <input type="password" id="passwordInput" class="password-input" placeholder="Enter password">
+            <button onclick="unlockNotebook()" class="unlock-btn">Unlock</button>
+            <div id="passwordError" class="error"></div>
+        </div>
+        
+        <!-- Notes Section (Hidden until unlocked) -->
+        <div id="notesSection" style="display: none;">
+            <!-- Message display area -->
+            <div id="messageArea" class="message"></div>
+            
+            <!-- Add Note Form - Clean wide text box -->
+            <div class="note-form">
+                <textarea id="noteContent" class="note-input" placeholder="Write your note here..."></textarea>
+                <button onclick="saveNote()" class="save-btn" id="saveNoteBtn">💾 Save Note</button>
+                
+                <!-- Import/Export buttons -->
+                <div class="import-export-container">
+                    <button onclick="triggerFileImport()" class="import-export-btn import">
+                        📥 Import Notes
+                    </button>
+                    <button onclick="exportNotes()" class="import-export-btn export">
+                        📤 Export Notes
+                    </button>
+                </div>
+                
+                <!-- Hidden file input -->
+                <input type="file" id="fileImport" accept=".json,application/json" onchange="importNotes(event)">
+                
+                <!-- hidden field to store editing id -->
+                <input type="hidden" id="editingNoteId" value="">
+            </div>
+            
+            <!-- Notes List -->
+            <div class="notes-header">
+                <h3>📋 My Notes (Total: <span id="noteCount">0</span>)</h3>
+                <button onclick="clearAllNotes()" class="clear-btn">Clear All</button>
+            </div>
+            
+            <div id="notesList"></div>
+        </div>
+    </div>
+
+    <script>
+        // ====================================
+        // NOTEBOOK WITH CLEAN WIDE TEXT BOX
+        // ====================================
+        
+        // Configuration
+        const PASSWORD = "sungjinwoo"; // CHANGE THIS!
+        const STORAGE_KEY = "my_notebook_notes";
+        const DARK_MODE_KEY = "notebook_dark_mode";
+        
+        // Global variables
+        let notes = [];
+        let hasUnsavedChanges = false;
+        let autoSaveTimeout;
+        
+        // Enhanced URL regex pattern - catches all common URL formats
+        const URL_PATTERN = /(https?:\/\/[^\s]+)|(www\.[^\s]+\.[^\s]+)|([a-zA-Z0-9][a-zA-Z0-9-]*\.(?:com|org|net|edu|gov|mil|io|co|uk|au|ca|de|fr|jp|kr|cn|in|ru|br|it|es|nl|se|no|dk|fi|pl|cz|hu|at|ch|be|pt|gr|nz|ie|za|ar|cl|mx|sg|hk|tw|th|vn|id|ph|my|pk|bd|lk|np|mm|la|kh|xyz|tech|online|site|space|blog|app|dev|info|biz|me|tv|cc|ws|us|eu)(?:\.[a-zA-Z]{2})?(?:\/[^\s]*)?)/gi;
+        
+        // ====================================
+        // INITIALIZATION
+        // ====================================
+        
+        // Load everything when page starts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load dark mode preference
+            loadDarkMode();
+            
+            // Load notes from storage
+            loadNotes();
+            
+            // Check if already unlocked this session
+            if (sessionStorage.getItem('notebook_unlocked') === 'true') {
+                unlockWithoutPassword();
+            }
+            
+            // Setup auto-save
+            setupAutoSave();
+        });
+        
+        // ====================================
+        // DARK MODE FUNCTIONS
+        // ====================================
+        
+        function loadDarkMode() {
+            const isDarkMode = localStorage.getItem(DARK_MODE_KEY) === 'true';
+            if (isDarkMode) {
+                document.body.classList.add('dark');
+                updateDarkModeButton(true);
+            }
+        }
+        
+        function toggleDarkMode() {
+            const isDarkMode = document.body.classList.toggle('dark');
+            localStorage.setItem(DARK_MODE_KEY, isDarkMode);
+            updateDarkModeButton(isDarkMode);
+        }
+        
+        function updateDarkModeButton(isDarkMode) {
+            const icon = document.getElementById('darkModeIcon');
+            const text = document.getElementById('darkModeText');
+            
+            if (isDarkMode) {
+                icon.textContent = '☀️';
+                text.textContent = 'Light';
+            } else {
+                icon.textContent = '🌙';
+                text.textContent = 'Dark';
+            }
+        }
+        
+        // ====================================
+        // PASSWORD FUNCTIONS
+        // ====================================
+        
+        function unlockNotebook() {
+            const enteredPassword = document.getElementById('passwordInput').value;
+            
+            if (enteredPassword === PASSWORD) {
+                unlockWithoutPassword();
+            } else {
+                document.getElementById('passwordError').innerText = '❌ Incorrect password';
+            }
+        }
+        
+        function unlockWithoutPassword() {
+            document.getElementById('passwordSection').style.display = 'none';
+            document.getElementById('notesSection').style.display = 'block';
+            sessionStorage.setItem('notebook_unlocked', 'true');
+            displayNotes(); // Show notes after unlocking
+        }
+        
+        // ====================================
+        // NOTE FUNCTIONS
+        // ====================================
+        
+        function loadNotes() {
+            const storedNotes = localStorage.getItem(STORAGE_KEY);
+            if (storedNotes) {
+                notes = JSON.parse(storedNotes);
+            } else {
+                notes = [];
+            }
+        }
+        
+        function saveNotesToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+            updateNoteCount();
+        }
+        
+        function updateNoteCount() {
+            const countSpan = document.getElementById('noteCount');
+            if (countSpan) {
+                countSpan.textContent = notes.length;
+            }
+        }
+        
+        // Enhanced linkify function - catches all URL patterns
+        function linkify(text) {
+            if (!text) return '';
+            
+            // Escape HTML first
+            const escaped = escapeHtml(text);
+            
+            // Replace all URL patterns with clickable links
+            return escaped.replace(URL_PATTERN, function(url) {
+                // Clean the URL and ensure it has protocol
+                let href = url;
+                
+                // Add protocol if missing
+                if (href.startsWith('www.')) {
+                    href = 'http://' + href;
+                } else if (!href.startsWith('http://') && !href.startsWith('https://') && !href.startsWith('www.')) {
+                    // Check if it's a domain-like pattern
+                    if (href.match(/^[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}/)) {
+                        href = 'http://' + href;
+                    }
+                }
+                
+                // Open in new tab with security attributes
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer nofollow" onclick="event.stopPropagation();">${url}</a>`;
+            });
+        }
+        
+        function saveNote() {
+            const content = document.getElementById('noteContent').value.trim();
+            const editingId = document.getElementById('editingNoteId').value;
+            
+            if (content === '') {
+                alert('Please write something before saving!');
+                return;
+            }
+            
+            if (editingId) {
+                // UPDATE EXISTING NOTE
+                const noteId = Number(editingId);
+                const index = notes.findIndex(n => n.id === noteId);
+                if (index !== -1) {
+                    notes[index].text = content;
+                    notes[index].timestamp = new Date().toLocaleString() + ' (edited)';
+                }
+                // clear editing state
+                document.getElementById('editingNoteId').value = '';
+                document.querySelector('.save-btn').innerHTML = '💾 Save Note';
+                showMessage('Note updated successfully!', 'success');
+            } else {
+                // CREATE NEW NOTE
+                const newNote = {
+                    id: Date.now(),
+                    text: content,
+                    timestamp: new Date().toLocaleString()
+                };
+                notes.unshift(newNote);
+                showMessage('Note saved successfully!', 'success');
+            }
+            
+            // Save to localStorage
+            saveNotesToStorage();
+            
+            // Clear input
+            document.getElementById('noteContent').value = '';
+            
+            // Reset unsaved changes flag
+            hasUnsavedChanges = false;
+            
+            // Refresh display
+            displayNotes();
+            
+            // Show auto-save indicator
+            showAutoSaveIndicator();
+        }
+        
+        function editNote(id) {
+            const note = notes.find(n => n.id === id);
+            if (!note) return;
+            
+            // put text into textarea
+            document.getElementById('noteContent').value = note.text;
+            // store editing id in hidden field
+            document.getElementById('editingNoteId').value = id;
+            // change button text to indicate editing mode
+            document.querySelector('.save-btn').innerHTML = '✏️ Update Note';
+            // focus on textarea
+            document.getElementById('noteContent').focus();
+            
+            hasUnsavedChanges = true;
+        }
+        
+        function displayNotes() {
+            const notesList = document.getElementById('notesList');
+            
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="status">📭 No notes yet. Add your first note above!</div>';
+            } else {
+                let html = '';
+                notes.forEach(note => {
+                    // Convert text to clickable links using enhanced linkify function
+                    const linkedText = linkify(note.text);
+                    
+                    html += `
+                        <div class="note-card">
+                            <div class="note-text">${linkedText}</div>
+                            <div class="note-date">📅 ${note.timestamp}</div>
+                            <button class="edit-note" onclick="editNote(${note.id})" title="Edit note">✏️</button>
+                            <button class="delete-note" onclick="deleteNote(${note.id})">✕</button>
+                        </div>
+                    `;
+                });
+                
+                notesList.innerHTML = html;
+            }
+            
+            updateNoteCount();
+        }
+        
+        function deleteNote(id) {
+            if (confirm('Delete this note?')) {
+                // If currently editing this note, reset editor
+                const editingId = document.getElementById('editingNoteId').value;
+                if (Number(editingId) === id) {
+                    document.getElementById('noteContent').value = '';
+                    document.getElementById('editingNoteId').value = '';
+                    document.querySelector('.save-btn').innerHTML = '💾 Save Note';
+                    hasUnsavedChanges = false;
+                }
+                notes = notes.filter(note => note.id !== id);
+                saveNotesToStorage();
+                displayNotes();
+                showAutoSaveIndicator();
+                showMessage('Note deleted successfully!', 'success');
+            }
+        }
+        
+        function clearAllNotes() {
+            if (confirm('Delete ALL notes? This cannot be undone!')) {
+                notes = [];
+                localStorage.removeItem(STORAGE_KEY);
+                // Also reset editor if something was being edited
+                document.getElementById('noteContent').value = '';
+                document.getElementById('editingNoteId').value = '';
+                document.querySelector('.save-btn').innerHTML = '💾 Save Note';
+                hasUnsavedChanges = false;
+                displayNotes();
+                showAutoSaveIndicator();
+                showMessage('All notes cleared!', 'success');
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // ====================================
+        // IMPORT / EXPORT FUNCTIONS
+        // ====================================
+        
+        function triggerFileImport() {
+            document.getElementById('fileImport').click();
+        }
+        
+        function importNotes(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // Validate the imported data
+                    if (!Array.isArray(importedData)) {
+                        throw new Error('Invalid format: Expected an array of notes');
+                    }
+                    
+                    // Validate each note has required fields
+                    const isValid = importedData.every(note => 
+                        note.hasOwnProperty('id') && 
+                        note.hasOwnProperty('text') && 
+                        note.hasOwnProperty('timestamp')
+                    );
+                    
+                    if (!isValid) {
+                        throw new Error('Invalid note format: Each note must have id, text, and timestamp');
+                    }
+                    
+                    // Ask user how to handle import
+                    const choice = confirm(
+                        `Found ${importedData.length} notes to import.\n\n` +
+                        'Click OK to merge with existing notes\n' +
+                        'Click Cancel to replace all existing notes'
+                    );
+                    
+                    if (choice) {
+                        // Merge: add imported notes, avoid duplicates by id
+                        const existingIds = new Set(notes.map(n => n.id));
+                        const newNotes = importedData.filter(n => !existingIds.has(n.id));
+                        notes = [...notes, ...newNotes];
+                        showMessage(`Merged ${newNotes.length} new notes successfully!`, 'success');
+                    } else {
+                        // Replace
+                        notes = importedData;
+                        showMessage(`Replaced all notes with ${importedData.length} imported notes!`, 'success');
+                    }
+                    
+                    // Sort notes by id (newest first)
+                    notes.sort((a, b) => b.id - a.id);
+                    
+                    // Save to storage
+                    saveNotesToStorage();
+                    
+                    // Refresh display
+                    displayNotes();
+                    
+                    // Reset file input
+                    event.target.value = '';
+                    
+                } catch (error) {
+                    showMessage('Error importing notes: ' + error.message, 'error');
+                    console.error('Import error:', error);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        function exportNotes() {
+            if (notes.length === 0) {
+                showMessage('No notes to export!', 'error');
+                return;
+            }
+            
+            try {
+                // Convert to JSON string with pretty formatting
+                const jsonString = JSON.stringify(notes, null, 2);
+                
+                // Create blob and download
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                // Create download link
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `notebook-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Cleanup
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage(`Exported ${notes.length} notes successfully!`, 'success');
+            } catch (error) {
+                showMessage('Error exporting notes: ' + error.message, 'error');
+                console.error('Export error:', error);
+            }
+        }
+        
+        function showMessage(text, type) {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.textContent = text;
+            messageArea.className = `message ${type}`;
+            messageArea.style.display = 'block';
+            
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                messageArea.style.display = 'none';
+            }, 3000);
+        }
+        
+        // ====================================
+        // AUTO-SAVE FUNCTIONS
+        // ====================================
+        
+        function setupAutoSave() {
+            const noteInput = document.getElementById('noteContent');
+            
+            // Track changes in textarea
+            noteInput.addEventListener('input', function() {
+                hasUnsavedChanges = true;
+                
+                // Clear previous timeout
+                if (autoSaveTimeout) {
+                    clearTimeout(autoSaveTimeout);
+                }
+                
+                // Auto-save after 3 seconds of no typing
+                autoSaveTimeout = setTimeout(() => {
+                    if (hasUnsavedChanges && noteInput.value.trim() !== '') {
+                        autoSaveCurrentNote();
+                    }
+                }, 3000);
+            });
+            
+            // Save when user leaves the page
+            window.addEventListener('beforeunload', function() {
+                if (hasUnsavedChanges) {
+                    autoSaveCurrentNote();
+                }
+            });
+            
+            // Save when tab becomes hidden
+            document.addEventListener('visibilitychange', function() {
+                if (document.visibilityState === 'hidden' && hasUnsavedChanges) {
+                    autoSaveCurrentNote();
+                }
+            });
+        }
+        
+        function autoSaveCurrentNote() {
+            const content = document.getElementById('noteContent').value.trim();
+            const editingId = document.getElementById('editingNoteId').value;
+            
+            if (content === '') return;
+            
+            if (editingId) {
+                // auto-save as update
+                const noteId = Number(editingId);
+                const index = notes.findIndex(n => n.id === noteId);
+                if (index !== -1) {
+                    notes[index].text = content;
+                    notes[index].timestamp = new Date().toLocaleString() + ' (auto-saved)';
+                }
+            } else {
+                // create new note (auto-save)
+                const newNote = {
+                    id: Date.now(),
+                    text: content,
+                    timestamp: new Date().toLocaleString() + ' (auto-saved)'
+                };
+                notes.unshift(newNote);
+                // Clear input for new note
+                document.getElementById('noteContent').value = '';
+                document.getElementById('editingNoteId').value = '';
+                document.querySelector('.save-btn').innerHTML = '💾 Save Note';
+            }
+            
+            saveNotesToStorage();
+            hasUnsavedChanges = false;
+            
+            // Refresh display
+            displayNotes();
+            
+            // Show indicator
+            showAutoSaveIndicator();
+        }
+        
+        function showAutoSaveIndicator() {
+            const indicator = document.getElementById('autoSaveIndicator');
+            indicator.style.display = 'block';
+            
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Manual save with Ctrl+Enter
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                const noteInput = document.getElementById('noteContent');
+                if (noteInput && document.getElementById('notesSection').style.display === 'block') {
+                    e.preventDefault();
+                    saveNote();
+                }
+            }
+        });
+        
+        // For debugging
+        console.log('✅ Notebook loaded successfully! (Clean wide text box)');
+        console.log('Password:', PASSWORD);
+    </script>
+</body>
+</html>
